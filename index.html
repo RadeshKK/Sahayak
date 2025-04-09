@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sahayaak - Elderly Care Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f0f9ff;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding-top: 4rem;
+            font-family: 'Arial', sans-serif;
+        }
+
+        nav {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-right: 2rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #fbbf24, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-left: auto;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(251, 191, 36, 0.2);
+            transform: translateY(-2px);
+        }
+
+        nav ul li a i {
+            font-size: 1.2rem;
+        }
+
+        .login-btn {
+            background-color: #fbbf24;
+            color: #1e3a8a;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .login-btn:hover {
+            background-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            min-height: calc(100vh - 4rem);
+            color: white;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 75%;
+            margin: 0;
+            padding-left: 2rem;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            width: 100%;
+            margin: 0;
+        }
+
+        .image-box {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            background-color: white;
+            width: 100%;
+        }
+
+        .image-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(30, 58, 138, 0.7), rgba(30, 58, 138, 0.9));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-box:hover::after {
+            opacity: 1;
+        }
+
+        .image-box h3 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            color: white;
+            background-color: rgba(30, 58, 138, 0.9);
+            margin: 0;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .main-image {
+            margin-top: 3rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-section {
+            padding: 4rem 2rem;
+            background-color: #f0f9ff;
+            color: #1e3a8a;
+        }
+
+        .about-content {
+            max-width: 75%;
+            margin: 0 auto;
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #1e3a8a;
+        }
+
+        .about-content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 75%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #fbbf24;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #fbbf24;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .news-section {
+            width: 25%;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .news-section h2 {
+            color: #fbbf24;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #fbbf24;
+        }
+
+        .news-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .news-item h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-item p {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .news-item a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .news-item a:hover {
+            text-decoration: underline;
+        }
+
+        .news-notification {
+            width: 25%;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .news-notification h2 {
+            color: #fbbf24;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #fbbf24;
+        }
+
+        .notification-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #fbbf24;
+        }
+
+        .notification-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .notification-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .notification-item h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-item p {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .notification-item .time {
+            color: #fbbf24;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .mic-btn {
+            background-color: #fbbf24;
+            color: #1e3a8a;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mic-btn:hover {
+            background-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .mic-btn.listening {
+            background-color: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .voice-feedback {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(30, 58, 138, 0.9);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <link rel="news/news/stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">Sahayaak</div>
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="games.html"><i class="fas fa-gamepad"></i> Games</a></li>
+            <li><a href="news/news/news.html"><i class="fas fa-newspaper"></i> News</a></li>
+            <li><a href="whats/whats/index.html"><i class="fas fa-users"></i> Connect</a></li>
+            <li><a href="#" id="micButton" class="mic-btn"><i class="fas fa-microphone"></i> Voice</a></li>
+            <li><a href="http://127.0.0.1:5500/login/login/login.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+        </ul>
+    </nav>
+
+    
+    <section class="hero">
+        <div class="hero-content">
+            <div class="image-grid" id="features">
+                <a href="http://127.0.0.1:5000/" class="image-box">
+                    <img src="images/community.jpg" alt="Community">
+                    <h3>Community</h3>
+                </a>
+                <a href="http://localhost:8501/" class="image-box">
+                    <img src="images/AiAssistant.jpg" alt="AI Assistant">
+                    <h3>AI Assistant</h3>
+                </a>
+                <a href="maps/maps/intex.html" class="image-box">
+                    <img src="images/localResources.jpg" alt="Local Resources">
+                    <h3>Local Resources</h3>
+                </a>
+                <a href="http://localhost:8502/" class="image-box">
+                    <img src="images/companion.jpg" alt="Companion">
+                    <h3>Companion</h3>
+                </a>
+                <a href="musclewiki/musclewiki/index.html" class="image-box">
+                    <img src="images/elderlyfit.jpg" alt="Elderly Fitness">
+                    <h3>Elderly Fitness</h3>
+                </a>
+            </div>
+        </div>
+
+        <div class="news-notification">
+            <h2>Latest Updates</h2>
+            <div class="notification-grid">
+                <div class="notification-item">
+                    <h3>New Fitness Program</h3>
+                    <p>Check out our new elderly fitness program designed specifically for senior citizens.</p>
+                    <div class="time">2 hours ago</div>
+                </div>
+                <div class="notification-item">
+                    <h3>Community Event</h3>
+                    <p>Join our weekly community gathering this Saturday at 10 AM.</p>
+                    <div class="time">5 hours ago</div>
+                </div>
+                <div class="notification-item">
+                    <h3>Health Tips</h3>
+                    <p>New health and wellness tips for maintaining an active lifestyle.</p>
+                    <div class="time">1 day ago</div>
+                </div>
+                <div class="notification-item">
+                    <h3>System Update</h3>
+                    <p>We've improved our AI assistant with new features and better response times.</p>
+                    <div class="time">2 days ago</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <div class="about-content">
+            <h2>About Sahayaak</h2>
+            <p>Sahayaak is a revolutionary platform dedicated to improving the lives of senior citizens through technology. Our mission is to provide accessible, compassionate, and innovative solutions that enhance the quality of life for the elderly.</p>
+            <p>We combine cutting-edge AI technology with human-centered design to create a comprehensive support system that addresses the unique needs of senior citizens. From health monitoring to social connection, Sahayaak is your trusted companion in the journey of aging gracefully.</p>
+            <p>Our team of experts in gerontology, technology, and healthcare work together to ensure that every feature we develop truly serves the needs of our elderly community.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-envelope"></i> info@sahayaak.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +1 234 567 890</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Care Street, Elderly City</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <ul>
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Sahayaak. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="voice-feedback" id="voiceFeedback"></div>
+
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "u7iwT3Jx045IWMDO894MP"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+    
+    <script src="news/news/script.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Voice Recognition Implementation
+        document.addEventListener('DOMContentLoaded', function() {
+            const micButton = document.getElementById('micButton');
+            const voiceFeedback = document.getElementById('voiceFeedback');
+            let recognition = null;
+
+            // Check if browser supports speech recognition
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    micButton.classList.add('listening');
+                    voiceFeedback.style.display = 'block';
+                    voiceFeedback.textContent = 'Listening...';
+                };
+
+                recognition.onend = function() {
+                    micButton.classList.remove('listening');
+                    voiceFeedback.style.display = 'none';
+                };
+
+                recognition.onresult = function(event) {
+                    const command = event.results[0][0].transcript.toLowerCase();
+                    voiceFeedback.textContent = `Command recognized: ${command}`;
+                    
+                    // Process the voice command
+                    processVoiceCommand(command);
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    voiceFeedback.textContent = `Error: ${event.error}`;
+                    micButton.classList.remove('listening');
+                };
+            } else {
+                micButton.style.display = 'none';
+                console.error('Speech recognition not supported in this browser');
+            }
+
+            // Handle microphone button click
+            micButton.addEventListener('click', function() {
+                if (recognition) {
+                    recognition.start();
+                }
+            });
+
+            // Process voice commands
+            function processVoiceCommand(command) {
+                const commands = {
+                    'go to community': () => window.location.href = 'http://127.0.0.1:5000/',
+                    'open ai assistant': () => window.location.href = 'http://localhost:8501/',
+                    'show local resources': () => window.location.href = 'maps/maps/intex.html',
+                    'open companion': () => window.location.href = 'http://localhost:8502/',
+                    'start elderly fitness': () => window.location.href = 'musclewiki/musclewiki/index.html',
+                    'connect':()=>window.location.href='whats/whats/index.html',
+                    'go to navigation bar': () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+                    'sign up': () => window.location.href = 'http://127.0.0.1:5500/login/login/login.html'
+                };
+
+                // Check for exact matches first
+                if (commands[command]) {
+                    commands[command]();
+                    return;
+                }
+
+                // Check for partial matches
+                for (const [key, action] of Object.entries(commands)) {
+                    if (command.includes(key)) {
+                        action();
+                        return;
+                    }
+                }
+
+                voiceFeedback.textContent = 'Command not recognized. Please try again.';
+            }
+        });
+    </script>
+</body>
+
+</html>

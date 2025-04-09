@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎮 Play Fun Games</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px #000;
+    }
+
+    select {
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      background: #ff6f61;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    select:hover {
+      background: #ff3b2e;
+    }
+
+    canvas {
+      display: none;
+      margin: 30px auto;
+      border: 4px solid #fff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      background: radial-gradient(#000 30%, #222 100%);
+    }
+
+    .tic-tac-toe {
+      display: none;
+      width: 200px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .cell {
+      width: 60px;
+      height: 60px;
+      font-size: 32px;
+      background: #ffd93d;
+      color: #222;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s;
+    }
+
+    .cell:hover {
+      transform: scale(1.1);
+      background: #f4a261;
+    }
+
+    .cell:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 Select a Game to Play</h1>
+  <select id="gameSelector">
+    <option value="">-- Choose a Game --</option>
+    <option value="snake">🐍 Snake</option>
+    <option value="tic-tac-toe">⭕ Tic Tac Toe</option>
+  </select>
+
+  <!-- Snake Game -->
+  <canvas id="snakeGame" width="400" height="400"></canvas>
+
+  <!-- Tic Tac Toe -->
+  <div id="ticTacToe" class="tic-tac-toe">
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+  </div>
+
+  <script>
+    const gameSelector = document.getElementById("gameSelector");
+    const snakeCanvas = document.getElementById("snakeGame");
+    const ticTacToe = document.getElementById("ticTacToe");
+
+    gameSelector.addEventListener("change", () => {
+      const value = gameSelector.value;
+      snakeCanvas.style.display = value === "snake" ? "block" : "none";
+      ticTacToe.style.display = value === "tic-tac-toe" ? "grid" : "none";
+
+      if (value === "snake") startSnake();
+      if (value === "tic-tac-toe") resetTicTacToe();
+    });
+
+    // Snake Game
+    let snakeInterval;
+    function startSnake() {
+      cancelAnimationFrame(snakeInterval);
+      const ctx = snakeCanvas.getContext("2d");
+      const grid = 20;
+      let count = 0;
+      let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
+      let apple = { x: 320, y: 320 };
+
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+      function loop() {
+        snakeInterval = requestAnimationFrame(loop);
+        if (++count < 4) return;
+        count = 0;
+
+        ctx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+        // Draw grid background
+        for (let i = 0; i < snakeCanvas.width; i += grid) {
+          for (let j = 0; j < snakeCanvas.height; j += grid) {
+            ctx.fillStyle = (i + j) % 40 === 0 ? "#333" : "#222";
+            ctx.fillRect(i, j, grid, grid);
+          }
+        }
+
+        snake.x += snake.dx;
+        snake.y += snake.dy;
+
+        if (snake.x < 0) snake.x = snakeCanvas.width - grid;
+        else if (snake.x >= snakeCanvas.width) snake.x = 0;
+        if (snake.y < 0) snake.y = snakeCanvas.height - grid;
+        else if (snake.y >= snakeCanvas.height) snake.y = 0;
+
+        snake.cells.unshift({ x: snake.x, y: snake.y });
+        if (snake.cells.length > snake.maxCells) snake.cells.pop();
+
+        ctx.fillStyle = "#ff3b2e";
+        ctx.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+
+        ctx.fillStyle = "#00ff7f";
+        snake.cells.forEach((cell, index) => {
+          ctx.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+
+          if (cell.x === apple.x && cell.y === apple.y) {
+            snake.maxCells++;
+            apple.x = getRandomInt(0, 20) * grid;
+            apple.y = getRandomInt(0, 20) * grid;
+          }
+
+          for (let i = index + 1; i < snake.cells.length; i++) {
+            if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+              snake.x = 160;
+              snake.y = 160;
+              snake.cells = [];
+              snake.maxCells = 4;
+              snake.dx = grid;
+              snake.dy = 0;
+              apple.x = getRandomInt(0, 20) * grid;
+              apple.y = getRandomInt(0, 20) * grid;
+            }
+          }
+        });
+      }
+
+      document.onkeydown = (e) => {
+        if (e.key === "ArrowLeft" && snake.dx === 0) {
+          snake.dx = -grid; snake.dy = 0;
+        } else if (e.key === "ArrowUp" && snake.dy === 0) {
+          snake.dy = -grid; snake.dx = 0;
+        } else if (e.key === "ArrowRight" && snake.dx === 0) {
+          snake.dx = grid; snake.dy = 0;
+        } else if (e.key === "ArrowDown" && snake.dy === 0) {
+          snake.dy = grid; snake.dx = 0;
+        }
+      };
+
+      loop();
+    }
+
+    // Tic Tac Toe Game
+    const cells = document.querySelectorAll(".cell");
+    let currentPlayer = "X";
+
+    function resetTicTacToe() {
+      cells.forEach(cell => {
+        cell.textContent = "";
+        cell.style.pointerEvents = "auto";
+      });
+      currentPlayer = "X";
+    }
+
+    function checkWinner() {
+      const combos = [
+        [0,1,2], [3,4,5], [6,7,8], 
+        [0,3,6], [1,4,7], [2,5,8], 
+        [0,4,8], [2,4,6]
+      ];
+
+      return combos.some(([a,b,c]) => {
+        return cells[a].textContent &&
+               cells[a].textContent === cells[b].textContent &&
+               cells[a].textContent === cells[c].textContent;
+      });
+    }
+
+    cells.forEach(cell => {
+      cell.addEventListener("click", () => {
+        if (cell.textContent !== "") return;
+        cell.textContent = currentPlayer;
+
+        if (checkWinner()) {
+          setTimeout(() => {
+            alert(`${currentPlayer} wins!`);
+            cells.forEach(c => c.style.pointerEvents = "none");
+          }, 100);
+        } else if ([...cells].every(c => c.textContent)) {
+          setTimeout(() => alert("Draw!"), 100);
+        } else {
+          currentPlayer = currentPlayer === "X" ? "O" : "X";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
