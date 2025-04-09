@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Community Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-heart"></i> Senior Community Hub</h1>
+            <p class="subtitle">Connect, Share, and Stay Active Together</p>
+        </header>
+
+        <main>
+            <div class="content-wrapper">
+                <!-- Chat Section -->
+                <section class="chat-section">
+                    <h2><i class="fas fa-comments"></i> Community Chat</h2>
+                    <div class="chat-controls">
+                        <button id="read-aloud" class="accessibility-btn">
+                            <i class="fas fa-volume-up"></i> Read Aloud
+                        </button>
+                        <button id="fontSizeBtn" class="accessibility-btn">
+                            <i class="fas fa-text-height"></i> Increase Text Size
+                        </button>
+                        <button id="historyBtn" class="accessibility-btn">
+                            <i class="fas fa-history"></i> History
+                        </button>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Messages will be added here dynamically -->
+                    </div>
+                    <div class="message-input">
+                        <textarea 
+                            id="message-input" 
+                            placeholder="Type your message here..."
+                            aria-label="Type your message"
+                        ></textarea>
+                        <div class="message-actions">
+                            <button id="send-button" class="send-button" title="Send message">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                            <button id="addEmojiBtn" class="emoji-button" title="Add emoji">
+                                <i class="far fa-smile"></i>
+                            </button>
+                            <button id="micButton" class="mic-button" title="Start voice input" aria-label="Start voice input">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Events Section -->
+                <section class="events-section">
+                    <h2><i class="fas fa-calendar-alt"></i> Upcoming Events <span id="event-count" class="event-count">(0)</span></h2>
+                    <div class="events-list" id="event-list">
+                        <!-- Events will be added here dynamically -->
+                    </div>
+                    <button id="addEventBtn" class="add-event-button">
+                        <i class="fas fa-plus"></i> Propose New Event
+                    </button>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <p>Need help? Call our support line: <a href="tel:+1234567890">(123) 456-7890</a></p>
+            <p class="daily-quote" id="dailyQuote">Loading daily inspiration...</p>
+        </footer>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <h3>Propose New Event</h3>
+            <form id="eventForm">
+                <div class="form-group">
+                    <label for="eventTitle">Event Title</label>
+                    <input type="text" id="eventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventDate">Date</label>
+                    <input type="date" id="eventDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventTime">Time</label>
+                    <input type="time" id="eventTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventLocation">Location</label>
+                    <input type="text" id="eventLocation" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventDescription">Description</label>
+                    <textarea id="eventDescription" required></textarea>
+                </div>
+                <button type="submit" class="submit-button">Create Event</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Sound -->
+    <audio id="notification-sound" src="{{ url_for('static', filename='notification.mp3') }}" preload="auto"></audio>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!-- Initialize voice recognition -->
+    <script>
+    function initializeVoiceRecognition() {
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isRecording = true;
+                micButton.classList.add('recording');
+                micButton.innerHTML = '<i class="fas fa-microphone"></i> Recording...';
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                micButton.classList.remove('recording');
+                micButton.innerHTML = '<i class="fas fa-microphone"></i>';
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                messageInput.value = transcript;
+            };
+        }
+    }
+    </script>
+</body>
+</html>
