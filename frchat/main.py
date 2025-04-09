@@ -4,7 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-API_KEY = "AIzaSyALlQogAp6P8tj77qFK3PqkSnrILFgQ3lA"
+API_KEY = ""
 
 def response_by_model(user_input: str):
     model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.7, api_key=API_KEY)
