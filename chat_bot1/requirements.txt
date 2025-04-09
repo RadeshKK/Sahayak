@@ -1,0 +1,8 @@
+langchain
+langchain-google-genai
+langchain-openai
+streamlit
+dotenv
+SpeechRecognition
+pyaudio
+pyttsx3
