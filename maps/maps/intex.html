@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wellness, Hospitals, Religious Places & Parks Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f8ff;
+      color: #003366;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    #map {
+      height: 80vh;
+      border-top: 4px solid #007bff;
+    }
+
+    .controls {
+      padding: 12px;
+      background-color: #fff7d6;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #004080;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0;
+      flex: 2;
+    }
+
+    .toggle-button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #e3f2fd;
+      border: 1px solid #007bff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 160px;
+    }
+
+    .toggle-button input[type="checkbox"] {
+      transform: scale(1.5);
+      margin-right: 6px;
+    }
+
+    .toggle-button:hover {
+      background-color: #cde4fc;
+      transform: translateY(-2px);
+    }
+
+    .route-inputs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 0;
+      flex: 2;
+    }
+
+    input[type="text"] {
+      padding: 8px 12px;
+      width: 250px;
+      font-size: 16px;
+      border: 1px solid #007bff;
+      border-radius: 8px;
+      background-color: white;
+      transition: all 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #0056b3;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .toggle-icon {
+      width: 20px;
+      height: 20px;
+      opacity: 0.9;
+    }
+
+    /* Add focus styles for better accessibility */
+    button:focus, input:focus, .toggle-button:focus {
+      outline: 2px solid #ffd700;
+      outline-offset: 2px;
+    }
+
+    /* Make popups more readable */
+    .leaflet-popup-content {
+      font-size: 16px;
+      padding: 8px;
+    }
+
+    .leaflet-popup-content button {
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .section-title {
+        text-align: center;
+      }
+      
+      .route-inputs {
+        flex-direction: column;
+      }
+      
+      input[type="text"] {
+        width: 100%;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <div class="section-title">Places to Show</div>
+    <div class="toggles">
+      <label class="toggle-button">
+        <input type="checkbox" id="toggleWellness">
+        <img class="toggle-icon" src="https://cdn-icons-png.flaticon.com/512/2965/2965567.png" alt="Wellness">
+        Wellness Centres
+      </label>
+      <label class="toggle-button">
+        <input type="checkbox" id="toggleHospitals">
+        <img class="toggle-icon" src="https://cdn-icons-png.flaticon.com/512/2983/2983810.png" alt="Hospital">
+        Hospitals
+      </label>
+      <label class="toggle-button">
+        <input type="checkbox" id="toggleReligious">
+        <img class="toggle-icon" src="https://cdn-icons-png.flaticon.com/512/3176/3176361.png" alt="Religious">
+        Religious Places
+      </label>
+      <label class="toggle-button">
+        <input type="checkbox" id="toggleParks">
+        <img class="toggle-icon" src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Parks">
+        Parks
+      </label>
+    </div>
+
+    <div class="section-title">Plan Your Route</div>
+    <div class="route-inputs">
+      <input id="source" type="text" placeholder="Enter Source Location">
+      <button onclick="useCurrentLocation()">Use My Location</button>
+      <button onclick="calculateRoute()">Get Route</button>
+    </div>
+  </div>
+
+  <div id="map"></div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+  <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1TYKQMnKUgU_ymfv8Kju8XQlz3KosN_g&libraries=places"></script>
+
+  <script>
+    const map = L.map('map');
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+          map.setView([userLat, userLng], 13);
+          L.marker([userLat, userLng]).addTo(map).bindPopup("You are here!").openPopup();
+        },
+        () => {
+          map.setView([20.5937, 78.9629], 5);
+        }
+      );
+    } else {
+      map.setView([20.5937, 78.9629], 5);
+    }
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let wellnessMarkers = [], hospitalMarkers = [], religiousMarkers = [], parkMarkers = [];
+    let routingControl, sourceLatLng, destinationLatLng;
+
+    const hospitalIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/2983/2983810.png',
+      iconSize: [28, 28],
+      iconAnchor: [14, 28],
+      popupAnchor: [0, -28]
+    });
+
+    const templeIcon = L.icon({
+      iconUrl: 'images.jpeg',
+      iconSize: [28, 28],
+      iconAnchor: [14, 28],
+      popupAnchor: [0, -28]
+    });
+
+    const parkIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854878.png',
+      iconSize: [28, 28],
+      iconAnchor: [14, 28],
+      popupAnchor: [0, -28]
+    });
+
+    function toggleMarkerGroup(markers, show) {
+      markers.forEach(marker => {
+        if (show) marker.addTo(map);
+        else map.removeLayer(marker);
+      });
+    }
+
+    document.getElementById('toggleWellness').addEventListener('change', function () {
+      toggleMarkerGroup(wellnessMarkers, this.checked);
+    });
+
+    document.getElementById('toggleHospitals').addEventListener('change', function () {
+      toggleMarkerGroup(hospitalMarkers, this.checked);
+    });
+
+    document.getElementById('toggleReligious').addEventListener('change', function () {
+      toggleMarkerGroup(religiousMarkers, this.checked);
+    });
+
+    document.getElementById('toggleParks').addEventListener('change', function () {
+      toggleMarkerGroup(parkMarkers, this.checked);
+    });
+
+    function addMarker(lat, lng, name, markersArray, icon = null, shouldAdd = false) {
+      const marker = L.marker([lat, lng], icon ? { icon } : undefined);
+      const popupContent = `
+        <strong>${name}</strong><br>
+        <button onclick="setDestination(${lat}, ${lng})">Set as Destination</button>
+      `;
+      marker.bindPopup(popupContent);
+      if (shouldAdd) marker.addTo(map);
+      markersArray.push(marker);
+    }
+
+    function setDestination(lat, lng) {
+      destinationLatLng = L.latLng(lat, lng);
+      alert("Destination set! Now enter or use your source location to route.");
+    }
+
+    function useCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            sourceLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+            alert("Current location set as source!");
+          },
+          error => {
+            alert("Failed to get current location.");
+          }
+        );
+      } else {
+        alert("Geolocation not supported by this browser.");
+      }
+    }
+
+    function calculateRoute() {
+      const sourceText = document.getElementById("source").value;
+
+      if (!sourceLatLng && sourceText.trim() !== "") {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: sourceText }, (results, status) => {
+          if (status === "OK") {
+            sourceLatLng = L.latLng(
+              results[0].geometry.location.lat(),
+              results[0].geometry.location.lng()
+            );
+            showRoute();
+          } else {
+            alert("Could not find the source address. Try again.");
+          }
+        });
+      } else {
+        showRoute();
+      }
+    }
+
+    function showRoute() {
+      if (!sourceLatLng || !destinationLatLng) {
+        alert("Please provide both source and destination.");
+        return;
+      }
+
+      if (routingControl) map.removeControl(routingControl);
+
+      routingControl = L.Routing.control({
+        waypoints: [sourceLatLng, destinationLatLng],
+        routeWhileDragging: false,
+        show: false,
+        addWaypoints: false,
+        lineOptions: {
+          styles: [{ color: 'purple', weight: 6 }]
+        }
+      }).addTo(map);
+
+      routingControl.on('routesfound', function (e) {
+        const bounds = L.latLngBounds(e.routes[0].coordinates);
+        map.fitBounds(bounds, { padding: [50, 50] });
+      });
+    }
+
+    // Load marker data
+    Papa.parse("cleaned_wellness_centres.csv", {
+      download: true,
+      header: true,
+      complete: function (results) {
+        results.data.forEach(row => {
+          const lat = parseFloat(row.latitude);
+          const lng = parseFloat(row.longitude);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            addMarker(lat, lng, row.wellnessCentreName || 'Wellness Centre', wellnessMarkers, null, false);
+          }
+        });
+      }
+    });
+
+    Papa.parse("cleaned_hospitals.csv", {
+      download: true,
+      header: true,
+      complete: function (results) {
+        results.data.forEach(row => {
+          const lat = parseFloat(row.latitude);
+          const lng = parseFloat(row.longitude);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            addMarker(lat, lng, row.name || 'Hospital', hospitalMarkers, hospitalIcon, false);
+          }
+        });
+      }
+    });
+
+    Papa.parse("cleaned_temples.csv", {
+      download: true,
+      header: true,
+      complete: function (results) {
+        results.data.forEach(row => {
+          const lat = parseFloat(row.latitude);
+          const lng = parseFloat(row.longitude);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            addMarker(lat, lng, row.name || 'Religious Place', religiousMarkers, templeIcon, false);
+          }
+        });
+      }
+    });
+
+    Papa.parse("parks.csv", {
+      download: true,
+      header: true,
+      complete: function (results) {
+        results.data.forEach(row => {
+          const lat = parseFloat(row.Latitude);
+          const lng = parseFloat(row.Longitude);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            addMarker(lat, lng, row.name || 'Park', parkMarkers, parkIcon, false);
+          }
+        });
+      }
+    });
+
+    // Google Autocomplete
+    const sourceAutocomplete = new google.maps.places.Autocomplete(document.getElementById("source"));
+    sourceAutocomplete.addListener('place_changed', () => {
+      const place = sourceAutocomplete.getPlace();
+      if (place.geometry) {
+        sourceLatLng = L.latLng(place.geometry.location.lat(), place.geometry.location.lng());
+      }
+    });
+  </script>
+</body>
+</html>

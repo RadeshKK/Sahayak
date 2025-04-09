@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Senior Companion - Login/Register</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: url('thatha family.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px;
+      color: #000;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.833);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #000000;
+    }
+
+    h1 {
+      color: #000000;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 1.1rem;
+      border: none;
+      background: #e0e0e0;
+      color: #333;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: #3498db;
+      color: white;
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 1.1rem;
+      color: #000000;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #000;
+    }
+
+    input::placeholder {
+      color: #666;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #2980b9;
+    }
+
+    .forgot-password {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      color: #fff;
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h1 style="color: #000;">Welcome to Senior Companion</h1>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('login')">Sign In</button>
+        <button class="tab-btn" onclick="showTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="form active">
+        <div class="form-group">
+          <label for="loginEmail">📧 Email or Username</label>
+          <input type="text" id="loginEmail" placeholder="Enter your email or username" required />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">🔒 Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" class="submit-btn">Sign In</button>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="form">
+        <div class="form-group"><label>👤 Full Name</label><input type="text" id="registerName" placeholder="Enter your full name" required></div>
+        <div class="form-group"><label>📧 Email</label><input type="email" id="registerEmail" placeholder="Enter your email" required></div>
+        <div class="form-group"><label>🎂 Age</label><input type="number" id="registerAge" placeholder="Enter your age" required></div>
+        <div class="form-group"><label>🚻 Gender</label><input type="text" id="registerGender" placeholder="Male / Female / Other" required></div>
+        <div class="form-group"><label>📞 Emergency Contact Name</label><input type="text" id="emergencyContactName" placeholder="Contact name" required></div>
+        <div class="form-group"><label>📱 Emergency Contact Number</label><input type="tel" id="emergencyContactNumber" placeholder="Contact number" required></div>
+        <div class="form-group"><label>👨‍⚕️ Primary Care Physician</label><input type="text" id="physician" placeholder="Doctor's name"></div>
+        <div class="form-group"><label>🏥 Preferred Hospital / Facility</label><input type="text" id="hospital" placeholder="Hospital name"></div>
+        <div class="form-group"><label>🩸 Blood Group</label><input type="text" id="bloodGroup" placeholder="e.g., A+, O-"></div>
+        <div class="form-group"><label>🌾 Known Allergies</label><input type="text" id="allergies" placeholder="e.g., pollen, nuts"></div>
+        <div class="form-group"><label>💊 Current Medications</label><input type="text" id="medications" placeholder="e.g., insulin, aspirin"></div>
+        <div class="form-group"><label>🔪 Previous Surgeries</label><input type="text" id="surgeries" placeholder="e.g., bypass, knee replacement"></div>
+        <div class="form-group"><label>📌 Chronic Conditions</label><input type="text" id="conditions" placeholder="e.g., diabetes, arthritis"></div>
+        <div class="form-group"><label>🚫 Functional Limitations</label><input type="text" id="limitations" placeholder="e.g., limited mobility"></div>
+        <div class="form-group"><label>⚠️ Recent Health Changes</label><input type="text" id="recentChanges" placeholder="e.g., recent surgery"></div>
+        <div class="form-group"><label>💉 Vaccination History</label><input type="text" id="vaccination" placeholder="e.g., COVID, flu"></div>
+        <div class="form-group"><label>🔐 Password</label><input type="password" id="registerPassword" placeholder="Create a password" required></div>
+        <div class="form-group"><label>✅ Confirm Password</label><input type="password" id="confirmPassword" placeholder="Re-enter password" required></div>
+        <button type="submit" class="submit-btn">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabName) {
+      document.querySelectorAll('.form').forEach(form => form.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  
+      document.getElementById(tabName + 'Form').classList.add('active');
+      document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+  
+      loginForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+
+  fetch('http://localhost:3000/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert('Login successful!');
+    } else {
+      alert(data.message || 'Invalid credentials');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Login failed!');
+  });
+});
+
+  
+      registerForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (password !== confirmPassword) {
+          alert('Passwords do not match');
+          return;
+        }
+        if (password.length < 8) {
+          alert('Password must be at least 8 characters');
+          return;
+        }
+  
+        fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            fullName: document.getElementById('registerName').value,
+            email: document.getElementById('registerEmail').value,
+            age: document.getElementById('registerAge').value,
+            gender: document.getElementById('registerGender').value,
+            emergencyContactName: document.getElementById('emergencyContactName').value,
+            emergencyContactNumber: document.getElementById('emergencyContactNumber').value,
+            physician: document.getElementById('physician').value,
+            hospital: document.getElementById('hospital').value,
+            bloodGroup: document.getElementById('bloodGroup').value,
+            allergies: document.getElementById('allergies').value,
+            medications: document.getElementById('medications').value,
+            surgeries: document.getElementById('surgeries').value,
+            conditions: document.getElementById('conditions').value,
+            limitations: document.getElementById('limitations').value,
+            recentChanges: document.getElementById('recentChanges').value,
+            vaccination: document.getElementById('vaccination').value,
+            password: password
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          registerForm.reset();
+          showTab('login');
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Registration failed!');
+        });
+      });
+    });
+  </script>
+  
+
+    });
+  </script>
+</body>
+</html>
