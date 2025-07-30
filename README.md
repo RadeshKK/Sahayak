@@ -234,11 +234,6 @@ We welcome contributions to make Sahayaak even better! Please follow these steps
 - [ ] Integration with healthcare systems
 - [ ] Advanced analytics and reporting
 
-## 📞 Support & Contact
-
-- **Email**: info@sahayaak.com
-- **Phone**: +1 234 567 890
-- **Address**: 123 Care Street, Elderly City
 
 ## 📄 License
 
